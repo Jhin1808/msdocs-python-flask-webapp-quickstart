@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+    <title>Data Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/styles.css') }}">
+    <style>
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+
+    #flash-messages ul {
+        position: fixed; /* Positioned relative to the viewport */
+        top: 50%; /* Center vertically */
+        left: 50%; /* Center horizontally */
+        transform: translate(-50%, -50%); /* Adjust the position accurately to the center */
+        background-color: rgba(255,0,0,0.7); /* Bright red background for high contrast */
+        color: #fff; /* White text for readability */
+        padding: 40px; /* Increased padding for larger size */
+        border-radius: 10px;
+        z-index: 1000; /* Ensure it's above other content */
+        width: auto; /* Adjust based on content or set a fixed width */
+        max-width: 80%; /* To ensure it does not take the whole screen on smaller devices */
+        text-align: center; /* Center the text */
+        box-shadow: 0 0 15px rgba(0,0,0,0.4); /* Add shadow for more depth */
+        border: 2px solid #fff; /* White border for more definition */
+        font-size: 24px; /* Larger font size for better visibility */
+        animation: fadeIn 1s, fadeOut 1s 3s; /* Fade in and then fade out */
+    }
+    #flash-messages li {
+        list-style: none;
+        margin: 10px 0; /* Add some space between multiple messages if they exist */
+    }
+</style>
+
+
+</head>
+    <main>
+        <div class="container py-4"> 
+            <h1 class="display-5 fw-bold text-center">Data Management</h1>
+
+            <div class="query-section mt-4">
+                <form id="data-form" method="POST" action="/submit-endpoint">
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" name="firstName" id="first-name" class="form-control" placeholder="First Name">
+                        </div>
+                        <div class="col">
+                            <input type="text" name="lastName" id="last-name" class="form-control" placeholder="Last Name">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <button type="submit" id="query-btn" class="btn btn-primary btn-lg w-100">Query</button>
+                        </div>
+                    </div>
+                </form>
+                
+                
+                 <!-- Flash Messages -->
+    <div id="flash-messages">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+                <!-- Load Data and Clear Data buttons -->
+                <div class="row mt-3">
+                    <div class="col">
+                        <form action="/load_data" method="post">
+                            <button type="submit" class="btn btn-success w-100">Load Data</button>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <form action="/clear_data" method="post">
+                            <button type="submit" class="btn btn-danger w-100">Clear Data</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results" class="mt-4"></div>
+        </div>
+    </main>
+    <script>
+    // Wait for the DOM to be loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set a timeout to hide the flash messages
+        setTimeout(function() {
+            var flashMessages = document.getElementById('flash-messages');
+            if (flashMessages) {
+                flashMessages.style.display = 'none';
+            }
+        }, 4000); // 5000 milliseconds = 5 seconds
+    });
+</script>
+</body>
+</html>
